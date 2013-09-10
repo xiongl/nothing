@@ -17,9 +17,9 @@ public class ValidSukodu {
 
         if(board==null || board.length!=9)
             return false;
-        Set fullSet = new HashSet();
+        Set fullSet = new HashSet<Character>();
         for (int i=1; i<=9; i++) {
-            fullSet.add(i);
+            fullSet.add(String.valueOf(i).charAt(0));
         }
         for (int i=0; i<9; i++) {
             char[] row = board[i];
@@ -27,14 +27,14 @@ public class ValidSukodu {
                 return false;
             Set set = new HashSet(fullSet);
             for (int j=0; j<9; j++) {
-                if (row[j]!='.' && !set.remove(j))
+                if (row[j]!='.' && !set.remove(row[j]))
                     return false;
             }
         }
         for (int j=0; j<9; j++) {
             Set set = new HashSet(fullSet);
             for (int i=0; i<9; i++) {
-                if (board[j][i]!='.' && !set.remove(board[j][i]))
+                if (board[i][j]!='.' && !set.remove(board[i][j]))
                     return false;
             }
         }
@@ -54,10 +54,13 @@ public class ValidSukodu {
         return true;
     }
     public static void main(String[] args) {
+        String[] strings = new String[]{"53..7....","6..195...",".98....6.","8...6...3","4..8.3..1","7...2...6",".6....28.","...419..5","....8..79"};
+
         char[][] board = new char[9][9];
         for (int i=0; i<9; i++) {
+            String str = strings[i];
             for (int j=0; j<9; j++) {
-                board[i][j] = '.';
+                board[i][j] = str.charAt(j);
             }
         }
         new ValidSukodu().isValidSudoku(board);
