@@ -16,28 +16,29 @@ public class RotateList {
         ListNode curr = head;
         ListNode tail = head;
         int i = 0;
-        boolean connected = false;
+        int len = 0;
         while (true) {
             curr = curr.next;
             i++;
-            if (curr.next == null) {
-                curr.next = head;
-                connected = true;
-                if (i>n) {
-                    ListNode result = tail.next;
-                    tail.next = null;
-                    return result;
-                }
-                n = n % (i+1);
-                i = 0;
-            }
             if (i>n) {
                 tail = tail.next;
-                if (connected){
+                if (curr.next == head){
                     ListNode result = tail.next;
                     tail.next = null;
                     return result;
                 }
+            }
+            if (curr.next == null) {
+                curr.next = head;
+                if (i>=n) {
+                    ListNode result = tail.next;
+                    tail.next = null;
+                    return result;
+                }
+                len = i+1;
+                n = n % len;
+                i = 0;
+                curr = head;
             }
         }
 
@@ -45,7 +46,9 @@ public class RotateList {
     public static void main(String[] args) {
         ListNode first = new ListNode(1);
         ListNode second = new ListNode(2);
+        ListNode third = new ListNode(3);
         first.next=second;
+        second.next=third;
         new RotateList().rotateRight(first, 1);
     }
 }
