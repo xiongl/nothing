@@ -2,9 +2,9 @@ package mine;
 
 /**
  * Created with IntelliJ IDEA.
- * User: Xiong
- * Date: 13-11-13
- * Time: 下午10:17
+ * User: bjcoe
+ * Date: 11/15/13
+ * Time: 6:12 PM
  * To change this template use File | Settings | File Templates.
  */
 public class ReverseLinkedListTwo {
