@@ -9,31 +9,29 @@ package mine;
  */
 public class PermutationSequence {
     public String getPermutation(int n, int k) {
-        // Start typing your Java solution below
-        // DO NOT write main() function
-        int permut = 1;
-        char[] arr = new char[n];
-        for (int i=1; i<=n; i++) {
-            permut *= i;
-            arr[i-1] = (char)('0'+i);
+        char[] c = new char[n];
+        int p=1;
+        for (int i=1 ; i<=n; i++) {
+            c[i-1] = (char) (i+'0');
+            p *= i;
         }
-        int m = 0;
+        int d = 0;
+        p /= n;
         k--;
-        permut /= n;
-        while (m<n-1 && k>0) {
-            int index = k / permut;
-            k = k % permut;
-            if (index > 0) {
-                char temp = arr[m+index];
-                for (int j=index; j>=1; j--) {
-                    arr[m+j] = arr[m+j-1];
+        char t;
+        for (int i=0; i<=n-2 && k>0; i++) {
+            d = k / p;
+            k = k - d*p;
+            if (d >= 1) {
+                t = c[i+d];
+                for (int j=d; j>=1; j--) {
+                    c[i+j] = c[i+j-1];
                 }
-                arr[m] = temp;
+                c[i] = t;
             }
-            permut /= (n-1-m);
-            m++;
+            p /= n-1-i;
         }
-        return new String(arr);
+        return new String(c);
     }
     public static void main(String[] args) {
         new PermutationSequence().getPermutation(3,5);

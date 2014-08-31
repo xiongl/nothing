@@ -2,6 +2,7 @@ package mine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,47 +12,37 @@ import java.util.Arrays;
  * To change this template use File | Settings | File Templates.
  */
 public class FourSum {
-    public ArrayList<ArrayList<Integer>> fourSum(int[] num, int target) {
-        // Start typing your Java solution below
-        // DO NOT write main() function
-        ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+    public List<List<Integer>> fourSum(int[] num, int target) {
         int len = num.length;
-        if (len<4)
-            return result;
         Arrays.sort(num);
-        for (int n=len-1; n>=3; n--) {
-            if (n<len-1 && num[n]==num[n+1])
-                continue;
-            for (int i=0; i<n-2; i++ ) {
-                if (i>0 && num[i]==num[i-1])
-                    continue;
-                for(int j=i+1, k=n-1; j<k; ) {
-                    if ((j>i+1 && num[j]==num[j-1]) || (num[i]+num[j]+num[k]+num[n] < target)) {
-                        j++;
-                        continue;
-                    }
-                    if ((k<n-1 && num[k]==num[k+1]) || (num[i]+num[j]+num[k]+num[n] > target)) {
-                        k--;
-                        continue;
-                    }
-                    if (num[i]+num[j]+num[k]+num[n] == target) {
-                        ArrayList<Integer> list = new ArrayList<Integer>(){};
-                        list.add(num[i]);
-                        list.add(num[j]);
-                        list.add(num[k]);
-                        list.add(num[n]);
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        for (int a=0; a<=len-4; ) {
+            for (int b=len-1; b>=a+3; ) {
+                for (int left=a+1, right=b-1; right>left; ) {
+                    if (num[a]+num[b]+num[left]+num[right]==target) {
+                        List<Integer> list = new ArrayList<Integer>();
+                        list.add(num[a]);
+                        list.add(num[left]);
+                        list.add(num[right]);
+                        list.add(num[b]);
                         result.add(list);
-                        j++;
-                        k--;
-                        continue;
+                        while (left<right && num[left]==num[++left]);
+                        while (left<right && num[right]==num[--right]);
+                    } else if (num[a]+num[b]+num[left]+num[right] > target) {
+                        right--;
+                    } else {
+                        left++;
                     }
                 }
+                while(b>=a+3 && num[b]==num[--b]);
             }
+            while (a<=len-4 && num[a]==num[++a]);
+
         }
         return result;
     }
 
     public static void main(String[] args) {
-        new FourSum().fourSum(new int[]{0,0,0,0}, 0);
+        new FourSum().fourSum(new int[]{5,5,3,5,1,-5,1,-2}, 4);
     }
 }

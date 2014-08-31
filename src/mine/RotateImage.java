@@ -9,29 +9,21 @@ package mine;
  */
 public class RotateImage {
     public void rotate(int[][] matrix) {
-        // Start typing your Java solution below
-        // DO NOT write main() function
-        if (matrix==null || matrix.length<2)
-            return;
         int n = matrix.length;
-        for (int i=1; i<=(n+1)/2; i++) {
-            for (int j=1; j<=n/2; j++) {
-                if (i==j && i+j==n+1)
-                    continue;
-                int x = i;
-                int y = j;
-                int curr = matrix[x-1][y-1];
-                while (true) {
-                    int targetX = y;
-                    int targetY = n+1-x;
-                    int target = matrix[targetX-1][targetY-1];
-                    matrix[targetX-1][targetY-1] = curr;
-                    curr = target;
-                    x = targetX;
-                    y = targetY;
-                    if (x==i && y==j)
-                        break;
-                }
+        int m = matrix[0].length;
+        int temp;
+        for (int i=0; i<n; i++) {
+            for (int j=i+1; j<m; j++) {
+                temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m/2; j++) {
+                temp = matrix[i][j];
+                matrix[i][j] = matrix[i][m-1-j];
+                matrix[i][m-1-j] = temp;
             }
         }
     }

@@ -1,6 +1,7 @@
 package mine;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,61 +11,60 @@ import java.util.ArrayList;
  * To change this template use File | Settings | File Templates.
  */
 public class TextJustification {
-    public ArrayList<String> fullJustify(String[] words, int L) {
-        // Start typing your Java solution below
-        // DO NOT write main() function
-        ArrayList<String> strs = new ArrayList<String>();
-        if (words==null || words.length==0)
-            return strs;
-        ArrayList<ArrayList<String>> lines = new ArrayList<ArrayList<String>>();
-        int length = 0;
-        ArrayList<String> line = new ArrayList<String>();
-        lines.add(line);
+    public List<String> fullJustify(String[] words, int L) {
+        List<List<String>> temp = new ArrayList<List<String>>();
+        int currLen = 0;
+        List<String> list = new ArrayList<String>();
+        if (words.length>0)
+            temp.add(list);
         for (String word : words) {
-            int len = word.length();
-            if (length+len<=L) {
-                line.add(word);
-                length += (len+1);
+            if (currLen+word.length()>L) {
+                list = new ArrayList<String>();
+                temp.add(list);
+                list.add(word);
+                currLen = word.length()+1;
             } else {
-                line = new ArrayList<String>();
-                line.add(word);
-                lines.add(line);
-                length = len + 1;
+                list.add(word);
+                currLen += word.length()+1;
             }
         }
-        StringBuilder sb = new StringBuilder();
-        for (ArrayList<String> list : lines) {
-            if (list.size() == 1) {
-                String str = list.get(0);
-                sb.append(str);
-                for(int i=0; i<L-str.length(); i++) {
+        List<String> result = new ArrayList<String>();
+        for (List<String> li : temp) {
+            result.add(printString(li, L));
+        }
+        return result;
+    }
+
+    private String printString(List<String> list, int L) {
+        StringBuffer sb = new StringBuffer();
+        if (list.size()==1) {
+            String str = list.get(0);
+            sb.append(str);
+            for (int i=str.length(); i<L; i++) {
+                sb.append(" ");
+            }
+            return sb.toString();
+        }
+
+        int strLen = 0;
+        for (String str: list) {
+            strLen += str.length();
+        }
+        int blankCount = (L-strLen)/(list.size()-1);
+        int moreBlank = (L-strLen)%(list.size()-1);
+        for (int i=0; i<list.size(); i++) {
+            sb.append(list.get(i));
+            if (i<list.size()-1) {
+                for (int j=0; j<blankCount; j++) {
                     sb.append(" ");
                 }
-                strs.add(sb.toString());
-                sb = new StringBuilder();
-            } else {
-                int size = list.size();
-                int strLen = 0;
-                for (String str : list) {
-                    strLen += str.length();
-                }
-                int blank = (L-strLen)/(size-1);
-                int addBlank = (L-strLen)%(size-1);
-                for (int i=0; i<size; i++) {
-                    sb.append(list.get(i));
-                    for (int j=0; j<blank; j++) {
-                        sb.append(" ");
-                    }
-                    if (i<addBlank)
-                        sb.append(" ");
-                }
-                strs.add(sb.toString());
-                sb = new StringBuilder();
+                if (i<moreBlank)
+                    sb.append(" ");
             }
         }
-        return strs;
+        return sb.toString();
     }
     public static void main(String[] args) {
-        new TextJustification().fullJustify(new String[]{"a","b","c","d","e"}, 1);
+        new TextJustification().fullJustify(new String[]{"a","b","c","d","e"}, 3);
     }
 }

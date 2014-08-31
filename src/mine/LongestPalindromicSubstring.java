@@ -9,39 +9,32 @@ package mine;
  */
 public class LongestPalindromicSubstring {
     public static void main(String[] args) {
-        new LongestPalindromicSubstring().longestPalindrome("abb");
+        new LongestPalindromicSubstring().longestPalindrome("ccc");
     }
 
     public String longestPalindrome(String s) {
-        // Start typing your Java solution below
-        // DO NOT write main() function
         int len = s.length();
         if (len == 0)
-            return "";
-        if (len == 1)
-            return s;
-        boolean[][] dp = new boolean[len][len];
-        int start = 0;
-        int max = 1;
-        for (int i = 0; i < len - 1; i++) {
-            dp[i][i] = true;
-            if (s.charAt(i) == s.charAt(i + 1)) {
-                dp[i][i + 1] = true;
-                max = 2;
-                start = i;
-            }
-        }
-        for (int i = 3; i <= len; i++) {
-            for (int j = 0; j < len - i + 1; j++) {
-                int k = j + i - 1;
-                if (s.charAt(j) == s.charAt(k) && dp[j + 1][k - 1]) {
-                    dp[j][k] = true;
-                    max = i;
-                    start = j;
+            return null;
+        boolean[][] p = new boolean[len][len];
+        String result = s.substring(0, 1);
+        for (int i=len-1; i>=0; i--) {
+            for (int j=i; j<len; j++) {
+                if (j==i)
+                    p[i][j] = true;
+                else if (s.charAt(i) != s.charAt(j))
+                    p[i][j] = false;
+                else {
+                    if (j==i+1)
+                        p[i][j] = true;
+                    else
+                        p[i][j] = p[i+1][j-1];
+                    if (p[i][j] && j-i+1 > result.length())
+                        result = s.substring(i, j+1);
                 }
             }
         }
-        return s.substring(start, start+max);
+        return result;
     }
 
 }

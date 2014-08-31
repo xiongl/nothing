@@ -1,5 +1,7 @@
 package mine;
 
+import java.util.Stack;
+
 /**
  * Created with IntelliJ IDEA.
  * User: bjcoe
@@ -9,33 +11,30 @@ package mine;
  */
 public class LargestRectInHistogram {
     public int largestRectangleArea(int[] height) {
-        // Note: The Solution object is instantiated only once and is reused by each test case.
+        if (height == null)
+            return 0;
         int len = height.length;
-        int largest = 0;
-        int size;
-        int peak = 0;
-        boolean hasPeak;
-        int min;
-        for (int i=0; i<len; i++) {
-            min = height[i];
-            hasPeak = false;
-            for (int j=(peak>i?peak:i); j<len; j++) {
-                if (height[j] < min)
-                    min = height[j];
-                if (j<len-1 && height[j+1]>=height[j])
-                    continue;
-                if (!hasPeak) {
-                    hasPeak = true;
-                    peak = j;
-                }
-                size = (j-i+1) * min;
-                if (size > largest)
-                    largest = size;
+        if (len == 0)
+            return 0;
+        int max = 0;
+        Stack<Integer> stack = new Stack<Integer>();
+        for (int i=0; i<=len; ) {
+            int temp = 0 ;
+            if (i<=len-1)
+                temp = height[i];
+            if (stack.empty() || height[stack.peek()] < temp) {
+                stack.push(i++);
+            }
+            else {
+                int left = stack.pop();
+                int width = i - (stack.empty() ? 0 : stack.peek()+1) ;
+                int area = height[left] * width;
+                max = max > area ? max : area;
             }
         }
-        return largest;
+        return max;
     }
     public static void main(String[] args) {
-        new LargestRectInHistogram().largestRectangleArea(new int[]{2,0,2});
+        new LargestRectInHistogram().largestRectangleArea(new int[]{4,2});
     }
 }
